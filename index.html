@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guerilla Transformation Tactics</title>
+    <title>Guerilla Transformation Hacks</title>
     <style>
         :root {
             --bg-color: #fcfcfc;
             --text-main: #111111;
             --text-muted: #666666;
-            --accent-olive: #556b2f; /* Modernes Urban Olive */
-            --accent-light: #f0f4e8;
+            --accent-olive: #556b2f;
+            --highlight-yellow: #fff200;
             --dot-color: #e5e5e5;
             --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            --card-shadow-hover: 0 15px 35px rgba(0,0,0,0.1);
         }
 
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
@@ -23,266 +22,187 @@
             background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
             background-size: 24px 24px;
             color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 80px 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* Zentriert den gesamten Inhalt horizontal */
+            font-family: -apple-system, system-ui, sans-serif;
+            margin: 0; padding: 40px 20px;
+            display: flex; flex-direction: column; align-items: center;
             min-height: 100vh;
         }
 
-        /* HEADER - Zentriert */
-        header {
-            max-width: 800px;
-            width: 100%;
-            margin-bottom: 60px;
-            text-align: center; /* Titel & Untertitel zentriert */
+        header { text-align: center; margin-bottom: 40px; width: 100%; }
+        h1 { font-size: clamp(1.8rem, 8vw, 2.8rem); font-weight: 800; margin: 0; letter-spacing: -0.02em; }
+        .subtitle { color: var(--text-muted); margin-top: 10px; font-size: 1.1rem; padding: 0 10px; }
+
+        /* FILTER */
+        .filter-nav {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 8px; margin-bottom: 30px; max-width: 800px;
         }
 
-        h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            margin: 0 0 16px 0;
-            line-height: 1.1;
-            color: var(--text-main);
+        .filter-tag {
+            background: white; border: 1px solid #ddd; padding: 8px 16px;
+            border-radius: 20px; cursor: pointer; font-size: 0.85rem; transition: 0.2s;
         }
 
-        .subtitle {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            font-weight: 400;
-            max-width: 500px;
-            margin: 0 auto; /* Zentriert den Block */
+        .filter-tag.active {
+            background: var(--accent-olive); color: white; border-color: var(--accent-olive);
         }
 
-        /* STEUERUNG - Zentriert */
-        .controls {
-            margin-bottom: 60px;
-            display: flex;
-            gap: 12px;
-            justify-content: center; /* Zentriert die Buttons */
-            width: 100%;
+        /* BUTTONS */
+        .controls { margin-bottom: 40px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        
+        button.main-btn {
+            background: var(--text-main); color: white; border: none;
+            padding: 14px 24px; border-radius: 6px; cursor: pointer; font-weight: 600;
+            transition: transform 0.1s; width: 100%; max-width: 280px;
         }
+        button.main-btn:active { transform: scale(0.98); }
 
-        button {
-            background: var(--text-main);
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border-radius: 6px;
-        }
-
-        button:hover {
-            background: var(--accent-olive);
-            transform: translateY(-1px);
-        }
-
-        button#btn-all {
-            background: white;
-            color: var(--text-main);
-            border: 1px solid #ddd;
-        }
-
-        button#btn-all:hover {
-            border-color: var(--accent-olive);
-            color: var(--accent-olive);
-        }
-
-        .hidden { display: none !important; }
-
-        /* GRID / CONTAINER */
+        /* CARDS GRID */
         #display-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 40px;
-            width: 100%;
-            max-width: 1100px;
-            justify-content: center; /* Zentriert Karten im Grid */
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px; width: 100%; max-width: 1100px;
         }
 
-        /* Spezifische Zentrierung für die Zufallskarte */
-        .single-mode {
-            display: flex !important;
-            justify-content: center;
-            width: 100%;
+        .single-mode { display: flex !important; justify-content: center; }
+
+        /* CARD ANIMATION & DESIGN */
+        .card-container { 
+            width: 100%; max-width: 320px; height: 460px; 
+            perspective: 1000px; cursor: pointer;
+            opacity: 0; transform: translateY(20px);
+            animation: slideUp 0.5s ease forwards;
         }
 
-        /* KARTEN */
-        .card-container {
-            width: 320px;
-            height: 460px;
-            perspective: 2000px;
-            cursor: pointer; /* Pointer für die gesamte Karte */
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            transform-style: preserve-3d;
-        }
-
-        .card-container.is-flipped .card-inner {
-            transform: rotateY(180deg);
-        }
+        .card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); transform-style: preserve-3d; }
+        .card-container.is-flipped .card-inner { transform: rotateY(180deg); }
 
         .card-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            background: white;
-            border-radius: 12px;
-            border: 1px solid #eee;
-            box-shadow: var(--card-shadow);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            background: white; border-radius: 12px; border: 1px solid #eee;
+            display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--card-shadow);
         }
 
-        .card-container:hover .card-face {
-            box-shadow: var(--card-shadow-hover);
-            border-color: var(--accent-olive);
+        .card-front img { width: 100%; height: 220px; object-fit: cover; }
+        .card-front .content { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        
+        .highlight-title {
+            display: inline;
+            background-image: linear-gradient(100deg, rgba(255, 242, 0, 0.8) 0%, rgba(255, 242, 0, 0.9) 100%);
+            background-repeat: no-repeat; background-size: 100% 0.8em; background-position: 0 0.4em;
+            padding: 0 4px; font-size: 1.4rem; font-weight: 800; line-height: 1.4;
         }
 
-        /* VORDERSEITE */
-        .card-front img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            filter: grayscale(0.2);
-            transition: filter 0.3s ease;
+        .card-back { transform: rotateY(180deg); padding: 30px; border-top: 6px solid var(--accent-olive); }
+        .card-back b { background: var(--highlight-yellow); display: inline-block; padding: 2px 8px; margin-bottom: 15px; }
+
+        .tag-pill {
+            font-size: 0.7rem; background: #f0f0f0; padding: 4px 10px;
+            border-radius: 4px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;
         }
 
-        .card-container:hover .card-front img {
-            filter: grayscale(0); /* Bild wird beim Hover farbig */
-        }
+        .source { font-size: 0.75rem; color: #999; margin-top: auto; padding-top: 15px; border-top: 1px solid #eee; }
 
-        .card-front .content {
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            flex-grow: 1;
-        }
-
-        .card-front h2 {
-            font-size: 1.35rem;
-            margin: 0;
-            font-weight: 700;
-            letter-spacing: -0.01em;
-            color: var(--text-main);
-        }
-
-        .card-front .tap-hint {
-            font-size: 0.8rem;
-            color: var(--accent-olive);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-        }
-
-        /* RÜCKSEITE */
-        .card-back {
-            transform: rotateY(180deg);
-            padding: 35px;
-            border-top: 6px solid var(--accent-olive); /* Farblicher Akzent oben */
-        }
-
-        .card-back b {
-            font-size: 1.25rem;
-            display: block;
-            margin-bottom: 20px;
-            color: var(--accent-olive);
-            line-height: 1.2;
-        }
-
-        .card-back p {
-            font-size: 0.95rem;
-            line-height: 1.7;
-            color: #333;
-            margin: 0;
-        }
-
-        .card-back .source {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            margin-top: auto;
+        /* MOBILE OPTIMIZATIONS */
+        @media (max-width: 600px) {
+            body { padding: 40px 15px; }
+            h1 { line-height: 1.2; }
+            .card-container { height: 420px; } /* Etwas flacher auf Mobile */
+            .controls { flex-direction: column; align-items: center; }
+            button.main-btn { width: 100%; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Guerilla Transformation Tactics</h1>
-        <div class="subtitle">Veränderung mit kleinen Interventionen. Ein Archiv systemischer Hebelpunkte.</div>
+        <h1>Guerilla Transformation Hacks</h1>
+        <div class="subtitle">Veränderung mit kleinen Interventionen.</div>
     </header>
 
+    <div class="filter-nav" id="filter-nav"></div>
+
     <div class="controls">
-        <button id="btn-random" onclick="showRandom()">Taktik ziehen</button>
-        <button id="btn-all" class="hidden" onclick="showAll()">Alle anzeigen</button>
+        <button class="main-btn" onclick="showRandom()">Zufalls-Hack ziehen</button>
+        <button class="main-btn" style="background:#eee; color:#111; border:1px solid #ddd" onclick="showAll()">Alle Hacks anzeigen</button>
     </div>
 
     <div id="display-container"></div>
 
     <script src="data.js"></script>
-
     <script>
         const container = document.getElementById('display-container');
-        const btnAll = document.getElementById('btn-all');
-        let lastIndex = -1;
+        const filterNav = document.getElementById('filter-nav');
+        let currentFilter = 'All';
 
-        function createCardHTML(data) {
+        function initFilters() {
+            const allTags = new Set(['All']);
+            cardData.forEach(card => card.tags.forEach(tag => allTags.add(tag)));
+            filterNav.innerHTML = '';
+            allTags.forEach(tag => {
+                const btn = document.createElement('button');
+                btn.className = `filter-tag ${tag === 'All' ? 'active' : ''}`;
+                btn.innerText = tag;
+                btn.onclick = () => filterCards(tag, btn);
+                filterNav.appendChild(btn);
+            });
+        }
+
+        function createCardHTML(data, index) {
+            const cleanText = data.text.replace(/Tactics/g, 'Hacks').replace(/Taktik/g, 'Hack');
+            const cleanFullTitle = data.fullTitle.replace(/Tactics/g, 'Hacks').replace(/Taktik/g, 'Hack');
+            const cleanTitle = data.title.replace(/Tactics/g, 'Hacks').replace(/Taktik/g, 'Hack');
+            const tagsHTML = data.tags.map(t => `<span class="tag-pill">${t}</span>`).join('');
+            
+            // Verzögerung für Kaskaden-Effekt beim Laden vieler Karten
+            const delay = index ? `style="animation-delay: ${index * 0.05}s"` : '';
+
             return `
-                <div class="card-container" onclick="this.classList.toggle('is-flipped')">
+                <div class="card-container" ${delay} onclick="this.classList.toggle('is-flipped')">
                     <div class="card-inner">
                         <div class="card-face card-front">
                             <img src="${data.image}" alt="">
                             <div class="content">
-                                <h2>${data.title}</h2>
-                                <span class="tap-hint">Intervention analysieren →</span>
+                                <div><span class="highlight-title">${cleanTitle}</span></div>
+                                <div style="display:flex; gap:5px; margin-top:15px; flex-wrap:wrap;">${tagsHTML}</div>
                             </div>
                         </div>
                         <div class="card-face card-back">
-                            <b>${data.fullTitle}</b>
-                            <p>${data.text}</p>
-                            <div class="source">REF-ID: ${data.source}</div>
+                            <b>${cleanFullTitle}</b>
+                            <p>${cleanText}</p>
+                            <div class="source">ID: ${data.source}</div>
                         </div>
                     </div>
-                </div>
-            `;
+                </div>`;
+        }
+
+        function filterCards(tag, btn) {
+            currentFilter = tag;
+            document.querySelectorAll('.filter-tag').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            container.classList.remove('single-mode');
+            const filtered = tag === 'All' ? cardData : cardData.filter(c => c.tags.includes(tag));
+            container.innerHTML = filtered.map((c, i) => createCardHTML(c, i)).join('');
         }
 
         function showRandom() {
-            if (typeof cardData === 'undefined') return;
-            let randomIndex;
-            do {
-                randomIndex = Math.floor(Math.random() * cardData.length);
-            } while (randomIndex === lastIndex && cardData.length > 1);
-            
-            lastIndex = randomIndex;
+            const filtered = currentFilter === 'All' ? cardData : cardData.filter(c => c.tags.includes(currentFilter));
+            const card = filtered[Math.floor(Math.random() * filtered.length)];
             container.classList.add('single-mode');
-            container.innerHTML = createCardHTML(cardData[randomIndex]);
-            btnAll.classList.remove('hidden');
-            
-            // Sanftes Einblenden bei neuem Zufall
-            container.style.opacity = 0;
-            setTimeout(() => { container.style.opacity = 1; container.style.transition = "opacity 0.4s"; }, 10);
+            container.innerHTML = createCardHTML(card, 0);
+            window.scrollTo({ top: container.offsetTop - 100, behavior: 'smooth' });
         }
 
-        function showAll() {
-            container.classList.remove('single-mode');
-            container.innerHTML = cardData.map(card => createCardHTML(card)).join('');
+        function showAll() { 
+            const activeBtn = document.querySelector('.filter-tag.active');
+            filterCards(currentFilter, activeBtn); 
         }
+
+        initFilters();
     </script>
 </body>
 </html>
