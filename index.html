@@ -30,91 +30,46 @@
 
         header { text-align: center; margin-bottom: 40px; width: 100%; }
         h1 { font-size: clamp(1.8rem, 8vw, 2.8rem); font-weight: 800; margin: 0; letter-spacing: -0.02em; }
-        .subtitle { color: var(--text-muted); margin-top: 10px; font-size: 1.1rem; padding: 0 10px; }
+        .subtitle { color: var(--text-muted); margin-top: 10px; font-size: 1.1rem; }
 
-        /* FILTER */
-        .filter-nav {
-            display: flex; flex-wrap: wrap; justify-content: center;
-            gap: 8px; margin-bottom: 30px; max-width: 800px;
-        }
+        .filter-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 30px; max-width: 800px; }
+        .filter-tag { background: white; border: 1px solid #ddd; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
+        .filter-tag.active { background: var(--accent-olive); color: white; border-color: var(--accent-olive); }
+        .tag-link-icon { margin-left: 8px; opacity: 0.4; }
 
-        .filter-tag {
-            background: white; border: 1px solid #ddd; padding: 8px 16px;
-            border-radius: 20px; cursor: pointer; font-size: 0.85rem; transition: 0.2s;
-        }
-
-        .filter-tag.active {
-            background: var(--accent-olive); color: white; border-color: var(--accent-olive);
-        }
-
-        /* BUTTONS */
         .controls { margin-bottom: 40px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-        
-        button.main-btn {
-            background: var(--text-main); color: white; border: none;
-            padding: 14px 24px; border-radius: 6px; cursor: pointer; font-weight: 600;
-            transition: transform 0.1s; width: 100%; max-width: 280px;
-        }
-        button.main-btn:active { transform: scale(0.98); }
+        button.main-btn { background: var(--text-main); color: white; border: none; padding: 14px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; max-width: 280px; }
 
-        /* CARDS GRID */
-        #display-container {
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px; width: 100%; max-width: 1100px;
-        }
-
+        #display-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; width: 100%; max-width: 1200px; }
         .single-mode { display: flex !important; justify-content: center; }
 
-        /* CARD ANIMATION & DESIGN */
-        .card-container { 
-            width: 100%; max-width: 320px; height: 460px; 
-            perspective: 1000px; cursor: pointer;
-            opacity: 0; transform: translateY(20px);
-            animation: slideUp 0.5s ease forwards;
-        }
-
-        @keyframes slideUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* KARTEN-STYLING */
+        .card-container { width: 100%; max-width: 340px; height: 520px; perspective: 1000px; cursor: pointer; opacity: 0; transform: translateY(20px); animation: slideUp 0.5s ease forwards; }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
 
         .card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); transform-style: preserve-3d; }
         .card-container.is-flipped .card-inner { transform: rotateY(180deg); }
 
-        .card-face {
-            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
-            background: white; border-radius: 12px; border: 1px solid #eee;
-            display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--card-shadow);
-        }
-
-        .card-front img { width: 100%; height: 220px; object-fit: cover; }
-        .card-front .content { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: white; border-radius: 12px; border: 1px solid #eee; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--card-shadow); }
         
-        .highlight-title {
-            display: inline;
-            background-image: linear-gradient(100deg, rgba(255, 242, 0, 0.8) 0%, rgba(255, 242, 0, 0.9) 100%);
-            background-repeat: no-repeat; background-size: 100% 0.8em; background-position: 0 0.4em;
-            padding: 0 4px; font-size: 1.4rem; font-weight: 800; line-height: 1.4;
-        }
+        /* VORDERSEITE */
+        .card-front img { width: 100%; height: 200px; object-fit: cover; }
+        .card-front .content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; gap: 12px; }
+        .highlight-title { display: inline; background-image: linear-gradient(100deg, rgba(255, 242, 0, 0.8) 0%, rgba(255, 242, 0, 0.9) 100%); background-repeat: no-repeat; background-size: 100% 0.8em; background-position: 0 0.4em; padding: 0 4px; font-size: 1.3rem; font-weight: 800; }
+        .teaser-text { font-size: 0.9rem; color: #444; line-height: 1.4; margin: 0; }
 
-        .card-back { transform: rotateY(180deg); padding: 30px; border-top: 6px solid var(--accent-olive); }
-        .card-back b { background: var(--highlight-yellow); display: inline-block; padding: 2px 8px; margin-bottom: 15px; }
+        /* RÜCKSEITE */
+        .card-back { transform: rotateY(180deg); padding: 25px; border-top: 8px solid var(--accent-olive); display: flex; flex-direction: column; gap: 15px; overflow-y: auto; }
+        .card-back h3 { margin: 0; font-size: 1.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; }
+        .section-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--accent-olive); margin-bottom: 4px; display: block; }
+        .card-back p { font-size: 0.85rem; line-height: 1.5; margin: 0; color: #333; }
+        
+        .share-link { position: absolute; top: 20px; right: 20px; cursor: pointer; opacity: 0.3; }
+        .tag-pill { font-size: 0.65rem; background: #f0f0f0; padding: 3px 8px; border-radius: 4px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+        .source-box { margin-top: auto; padding-top: 10px; border-top: 1px solid #eee; font-size: 0.7rem; color: #999; }
 
-        .tag-pill {
-            font-size: 0.7rem; background: #f0f0f0; padding: 4px 10px;
-            border-radius: 4px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;
-        }
-
-        .source { font-size: 0.75rem; color: #999; margin-top: auto; padding-top: 15px; border-top: 1px solid #eee; }
-
-        /* MOBILE OPTIMIZATIONS */
-        @media (max-width: 600px) {
-            body { padding: 40px 15px; }
-            h1 { line-height: 1.2; }
-            .card-container { height: 420px; } /* Etwas flacher auf Mobile */
-            .controls { flex-direction: column; align-items: center; }
-            button.main-btn { width: 100%; }
-        }
+        #toast { position: fixed; bottom: 20px; background: #111; color: white; padding: 10px 20px; border-radius: 30px; font-size: 0.8rem; transform: translateY(100px); transition: 0.3s; z-index: 1000; }
+        #toast.show { transform: translateY(0); }
     </style>
 </head>
 <body>
@@ -132,12 +87,23 @@
     </div>
 
     <div id="display-container"></div>
+    <div id="toast">Link kopiert!</div>
 
     <script src="data.js"></script>
     <script>
         const container = document.getElementById('display-container');
         const filterNav = document.getElementById('filter-nav');
+        const toast = document.getElementById('toast');
         let currentFilter = 'All';
+
+        function copyLink(e, url) {
+            e.stopPropagation();
+            const fullUrl = window.location.origin + window.location.pathname + url;
+            navigator.clipboard.writeText(fullUrl).then(() => {
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            });
+        }
 
         function initFilters() {
             const allTags = new Set(['All']);
@@ -146,35 +112,45 @@
             allTags.forEach(tag => {
                 const btn = document.createElement('button');
                 btn.className = `filter-tag ${tag === 'All' ? 'active' : ''}`;
-                btn.innerText = tag;
-                btn.onclick = () => filterCards(tag, btn);
+                btn.innerHTML = `${tag} <span class="tag-link-icon" onclick="copyLink(event, '?tag=${tag}')">🔗</span>`;
+                btn.onclick = (e) => { if(e.target === btn) filterCards(tag, btn); };
                 filterNav.appendChild(btn);
             });
         }
 
         function createCardHTML(data, index) {
-            const cleanText = data.text.replace(/Tactics/g, 'Hacks').replace(/Taktik/g, 'Hack');
-            const cleanFullTitle = data.fullTitle.replace(/Tactics/g, 'Hacks').replace(/Taktik/g, 'Hack');
-            const cleanTitle = data.title.replace(/Tactics/g, 'Hacks').replace(/Taktik/g, 'Hack');
             const tagsHTML = data.tags.map(t => `<span class="tag-pill">${t}</span>`).join('');
-            
-            // Verzögerung für Kaskaden-Effekt beim Laden vieler Karten
             const delay = index ? `style="animation-delay: ${index * 0.05}s"` : '';
-
+            
             return `
-                <div class="card-container" ${delay} onclick="this.classList.toggle('is-flipped')">
+                <div class="card-container" ${delay} id="card-${data.id}" onclick="this.classList.toggle('is-flipped')">
                     <div class="card-inner">
                         <div class="card-face card-front">
                             <img src="${data.image}" alt="">
                             <div class="content">
-                                <div><span class="highlight-title">${cleanTitle}</span></div>
-                                <div style="display:flex; gap:5px; margin-top:15px; flex-wrap:wrap;">${tagsHTML}</div>
+                                <div><span class="highlight-title">${data.title}</span></div>
+                                <p class="teaser-text">${data.teaser}</p>
+                                <div style="display:flex; gap:5px; flex-wrap:wrap; margin-top:auto;">${tagsHTML}</div>
                             </div>
                         </div>
                         <div class="card-face card-back">
-                            <b>${cleanFullTitle}</b>
-                            <p>${cleanText}</p>
-                            <div class="source">ID: ${data.source}</div>
+                            <div class="share-link" onclick="copyLink(event, '?id=${data.id}')">🔗</div>
+                            <h3>${data.title}</h3>
+                            
+                            <div>
+                                <span class="section-label">Beschreibung</span>
+                                <p>${data.text}</p>
+                            </div>
+                            
+                            <div>
+                                <span class="section-label">Hintergrund</span>
+                                <p>${data.hintergrund}</p>
+                            </div>
+
+                            <div class="source-box">
+                                <span class="section-label">Quelle</span>
+                                ${data.source}
+                            </div>
                         </div>
                     </div>
                 </div>`;
@@ -183,7 +159,7 @@
         function filterCards(tag, btn) {
             currentFilter = tag;
             document.querySelectorAll('.filter-tag').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            if(btn) btn.classList.add('active');
             container.classList.remove('single-mode');
             const filtered = tag === 'All' ? cardData : cardData.filter(c => c.tags.includes(tag));
             container.innerHTML = filtered.map((c, i) => createCardHTML(c, i)).join('');
@@ -194,15 +170,29 @@
             const card = filtered[Math.floor(Math.random() * filtered.length)];
             container.classList.add('single-mode');
             container.innerHTML = createCardHTML(card, 0);
-            window.scrollTo({ top: container.offsetTop - 100, behavior: 'smooth' });
         }
 
-        function showAll() { 
-            const activeBtn = document.querySelector('.filter-tag.active');
-            filterCards(currentFilter, activeBtn); 
+        function showAll() { filterCards('All', document.querySelector('.filter-tag')); }
+
+        function checkUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            const tag = params.get('tag');
+            if (id) {
+                const card = cardData.find(c => c.id == id);
+                if (card) {
+                    container.classList.add('single-mode');
+                    container.innerHTML = createCardHTML(card, 0);
+                    setTimeout(() => document.getElementById(`card-${id}`).classList.add('is-flipped'), 600);
+                }
+            } else if (tag) {
+                const btn = Array.from(document.querySelectorAll('.filter-tag')).find(b => b.innerText.includes(tag));
+                filterCards(tag, btn);
+            }
         }
 
         initFilters();
+        checkUrlParams();
     </script>
 </body>
 </html>
