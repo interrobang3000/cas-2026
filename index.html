@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guerilla Transformation Hacks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #fcfcfc;
-            --text-main: #111111;
+            --bg-color: #f0f2f5;
+            --text-main: #1a1a1a;
             --text-muted: #666666;
-            --accent-olive: #556b2f;
+            --vice-pink: #ff71ce;
+            --vice-blue: #01ffff;
             --highlight-yellow: #fff200;
-            --dot-color: #e5e5e5;
-            --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --card-bg: #ffffff;
+            --dot-color: #d1d5db;
         }
 
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
@@ -22,53 +24,269 @@
             background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
             background-size: 24px 24px;
             color: var(--text-main);
-            font-family: -apple-system, system-ui, sans-serif;
-            margin: 0; padding: 40px 20px;
-            display: flex; flex-direction: column; align-items: center;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 60px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
         }
 
-        header { text-align: center; margin-bottom: 40px; width: 100%; }
-        h1 { font-size: clamp(1.8rem, 8vw, 2.8rem); font-weight: 800; margin: 0; letter-spacing: -0.02em; }
-        .subtitle { color: var(--text-muted); margin-top: 10px; font-size: 1.1rem; }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            width: 100%;
+        }
 
-        .filter-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 30px; max-width: 800px; }
-        .filter-tag { background: white; border: 1px solid #ddd; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
-        .filter-tag.active { background: var(--accent-olive); color: white; border-color: var(--accent-olive); }
-        .tag-link-icon { margin-left: 8px; opacity: 0.4; }
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            margin: 0;
+            color: var(--text-main);
+            text-shadow: 3px 3px 0px var(--vice-pink), 6px 6px 0px var(--vice-blue);
+            transform: rotate(-1deg);
+        }
 
-        .controls { margin-bottom: 40px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-        button.main-btn { background: var(--text-main); color: white; border: none; padding: 14px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; max-width: 280px; }
+        .subtitle {
+            color: var(--text-muted);
+            margin-top: 15px;
+            font-size: 1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
 
-        #display-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; width: 100%; max-width: 1200px; }
+        /* HAUPT-CONTROLS */
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button.main-btn {
+            background: var(--text-main);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 4px;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--vice-pink);
+            transition: 0.2s;
+        }
+
+        button.main-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--vice-pink);
+        }
+
+        /* FILTER AUSKLAPP-MECHANISMUS */
+        .filter-wrapper {
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        #toggle-filter-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            padding: 10px;
+            transition: color 0.2s;
+        }
+
+        #toggle-filter-btn:hover {
+            color: var(--vice-pink);
+        }
+
+        .filter-nav {
+            display: none; /* Initial versteckt */
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            border: 2px dashed #d1d5db;
+            margin-top: 10px;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .filter-tag {
+            background: #ffffff;
+            border: 2px solid #ddd;
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            transition: 0.2s;
+        }
+
+        .filter-tag.active {
+            background: var(--text-main);
+            color: #fff;
+            border-color: var(--text-main);
+            box-shadow: 4px 4px 0px var(--vice-blue);
+        }
+
+        /* CARD GRID */
+        #display-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
         .single-mode { display: flex !important; justify-content: center; }
 
-        /* KARTEN-STYLING */
-        .card-container { width: 100%; max-width: 340px; height: 520px; perspective: 1000px; cursor: pointer; opacity: 0; transform: translateY(20px); animation: slideUp 0.5s ease forwards; }
-        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+        .card-container {
+            width: 100%;
+            max-width: 340px;
+            height: 520px;
+            perspective: 1200px;
+            cursor: pointer;
+        }
 
-        .card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); transform-style: preserve-3d; }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+        }
+
         .card-container.is-flipped .card-inner { transform: rotateY(180deg); }
 
-        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: white; border-radius: 12px; border: 1px solid #eee; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--card-shadow); }
-        
-        /* VORDERSEITE */
-        .card-front img { width: 100%; height: 200px; object-fit: cover; }
-        .card-front .content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; gap: 12px; }
-        .highlight-title { display: inline; background-image: linear-gradient(100deg, rgba(255, 242, 0, 0.8) 0%, rgba(255, 242, 0, 0.9) 100%); background-repeat: no-repeat; background-size: 100% 0.8em; background-position: 0 0.4em; padding: 0 4px; font-size: 1.3rem; font-weight: 800; }
-        .teaser-text { font-size: 0.9rem; color: #444; line-height: 1.4; margin: 0; }
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            background: var(--card-bg);
+            border: 3px solid #1a1a1a;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.1);
+        }
 
-        /* RÜCKSEITE */
-        .card-back { transform: rotateY(180deg); padding: 25px; border-top: 8px solid var(--accent-olive); display: flex; flex-direction: column; gap: 15px; overflow-y: auto; }
-        .card-back h3 { margin: 0; font-size: 1.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; }
-        .section-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--accent-olive); margin-bottom: 4px; display: block; }
-        .card-back p { font-size: 0.85rem; line-height: 1.5; margin: 0; color: #333; }
-        
-        .share-link { position: absolute; top: 20px; right: 20px; cursor: pointer; opacity: 0.3; }
-        .tag-pill { font-size: 0.65rem; background: #f0f0f0; padding: 3px 8px; border-radius: 4px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
-        .source-box { margin-top: auto; padding-top: 10px; border-top: 1px solid #eee; font-size: 0.7rem; color: #999; }
+        .card-front img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-bottom: 3px solid #1a1a1a;
+        }
 
-        #toast { position: fixed; bottom: 20px; background: #111; color: white; padding: 10px 20px; border-radius: 30px; font-size: 0.8rem; transform: translateY(100px); transition: 0.3s; z-index: 1000; }
+        .card-front .content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .highlight-title {
+            display: inline;
+            background: var(--highlight-yellow);
+            padding: 2px 6px;
+            font-size: 1.3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            border: 2px solid #1a1a1a;
+            box-shadow: 3px 3px 0px var(--vice-pink);
+        }
+
+        .teaser-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: var(--text-main);
+            margin-top: 10px;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            padding: 25px;
+            background: #fff;
+            border-top: 10px solid var(--vice-blue);
+        }
+
+        .card-back h3 {
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            margin: 0 0 15px 0;
+            color: var(--vice-pink);
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .tag-pill {
+            font-size: 0.65rem;
+            background: var(--vice-blue);
+            color: #000;
+            padding: 3px 8px;
+            border-radius: 2px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .share-link {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.2rem;
+            opacity: 0.4;
+        }
+
+        .source-box {
+            margin-top: auto;
+            font-size: 0.7rem;
+            color: #999;
+            border-top: 2px solid #eee;
+            padding-top: 10px;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            background: var(--text-main);
+            color: white;
+            padding: 12px 24px;
+            font-weight: 800;
+            text-transform: uppercase;
+            border-radius: 0;
+            box-shadow: 4px 4px 0px var(--vice-blue);
+            transform: translateY(150px);
+            transition: 0.3s;
+            z-index: 1000;
+        }
         #toast.show { transform: translateY(0); }
     </style>
 </head>
@@ -76,14 +294,17 @@
 
     <header>
         <h1>Guerilla Transformation Hacks</h1>
-        <div class="subtitle">Veränderung mit kleinen Interventionen.</div>
+        <div class="subtitle">Miami Change Division</div>
     </header>
 
-    <div class="filter-nav" id="filter-nav"></div>
-
     <div class="controls">
-        <button class="main-btn" onclick="showRandom()">Zufalls-Hack ziehen</button>
-        <button class="main-btn" style="background:#eee; color:#111; border:1px solid #ddd" onclick="showAll()">Alle Hacks anzeigen</button>
+        <button class="main-btn" onclick="showRandom()">Zufalls-Hack</button>
+        <button class="main-btn" style="background:#fff; color:#000; border:2px solid #000; box-shadow: 4px 4px 0px var(--vice-blue);" onclick="showAll()">Alle anzeigen (Shuffle)</button>
+    </div>
+
+    <div class="filter-wrapper">
+        <button id="toggle-filter-btn" onclick="toggleFilterNav()">+ Nach Themen filtern</button>
+        <div class="filter-nav" id="filter-nav"></div>
     </div>
 
     <div id="display-container"></div>
@@ -94,7 +315,22 @@
         const container = document.getElementById('display-container');
         const filterNav = document.getElementById('filter-nav');
         const toast = document.getElementById('toast');
+        const toggleBtn = document.getElementById('toggle-filter-btn');
         let currentFilter = 'All';
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function toggleFilterNav() {
+            const isVisible = filterNav.style.display === 'flex';
+            filterNav.style.display = isVisible ? 'none' : 'flex';
+            toggleBtn.innerText = isVisible ? '+ Nach Themen filtern' : '- Filter schließen';
+        }
 
         function copyLink(e, url) {
             e.stopPropagation();
@@ -112,18 +348,16 @@
             allTags.forEach(tag => {
                 const btn = document.createElement('button');
                 btn.className = `filter-tag ${tag === 'All' ? 'active' : ''}`;
-                btn.innerHTML = `${tag} <span class="tag-link-icon" onclick="copyLink(event, '?tag=${tag}')">🔗</span>`;
-                btn.onclick = (e) => { if(e.target === btn) filterCards(tag, btn); };
+                btn.innerHTML = `${tag} <span onclick="copyLink(event, '?tag=${tag}')" style="cursor:help;margin-left:5px">🔗</span>`;
+                btn.onclick = (e) => { if(e.target.tagName !== 'SPAN') filterCards(tag, btn); };
                 filterNav.appendChild(btn);
             });
         }
 
-        function createCardHTML(data, index) {
+        function createCardHTML(data) {
             const tagsHTML = data.tags.map(t => `<span class="tag-pill">${t}</span>`).join('');
-            const delay = index ? `style="animation-delay: ${index * 0.05}s"` : '';
-            
             return `
-                <div class="card-container" ${delay} id="card-${data.id}" onclick="this.classList.toggle('is-flipped')">
+                <div class="card-container" id="card-${data.id}" onclick="this.classList.toggle('is-flipped')">
                     <div class="card-inner">
                         <div class="card-face card-front">
                             <img src="${data.image}" alt="">
@@ -136,21 +370,11 @@
                         <div class="card-face card-back">
                             <div class="share-link" onclick="copyLink(event, '?id=${data.id}')">🔗</div>
                             <h3>${data.title}</h3>
-                            
-                            <div>
-                                <span class="section-label">Beschreibung</span>
-                                <p>${data.text}</p>
-                            </div>
-                            
-                            <div>
-                                <span class="section-label">Hintergrund</span>
-                                <p>${data.hintergrund}</p>
-                            </div>
-
-                            <div class="source-box">
-                                <span class="section-label">Inspiration</span>
-                                ${data.source}
-                            </div>
+                            <span class="section-label">Beschreibung</span>
+                            <p>${data.text}</p>
+                            <span class="section-label">Hintergrund</span>
+                            <p>${data.hintergrund || '---'}</p>
+                            <div class="source-box">${data.source || 'Guerilla Archives'}</div>
                         </div>
                     </div>
                 </div>`;
@@ -161,38 +385,24 @@
             document.querySelectorAll('.filter-tag').forEach(b => b.classList.remove('active'));
             if(btn) btn.classList.add('active');
             container.classList.remove('single-mode');
-            const filtered = tag === 'All' ? cardData : cardData.filter(c => c.tags.includes(tag));
-            container.innerHTML = filtered.map((c, i) => createCardHTML(c, i)).join('');
+            let filtered = tag === 'All' ? [...cardData] : cardData.filter(c => c.tags.includes(tag));
+            shuffleArray(filtered);
+            container.innerHTML = filtered.map(c => createCardHTML(c)).join('');
         }
 
         function showRandom() {
             const filtered = currentFilter === 'All' ? cardData : cardData.filter(c => c.tags.includes(currentFilter));
             const card = filtered[Math.floor(Math.random() * filtered.length)];
             container.classList.add('single-mode');
-            container.innerHTML = createCardHTML(card, 0);
+            container.innerHTML = createCardHTML(card);
         }
 
-        function showAll() { filterCards('All', document.querySelector('.filter-tag')); }
-
-        function checkUrlParams() {
-            const params = new URLSearchParams(window.location.search);
-            const id = params.get('id');
-            const tag = params.get('tag');
-            if (id) {
-                const card = cardData.find(c => c.id == id);
-                if (card) {
-                    container.classList.add('single-mode');
-                    container.innerHTML = createCardHTML(card, 0);
-                    setTimeout(() => document.getElementById(`card-${id}`).classList.add('is-flipped'), 600);
-                }
-            } else if (tag) {
-                const btn = Array.from(document.querySelectorAll('.filter-tag')).find(b => b.innerText.includes(tag));
-                filterCards(tag, btn);
-            }
+        function showAll() {
+            const allBtn = Array.from(document.querySelectorAll('.filter-tag')).find(b => b.innerText.includes('All'));
+            filterCards('All', allBtn);
         }
 
         initFilters();
-        checkUrlParams();
     </script>
 </body>
 </html>
