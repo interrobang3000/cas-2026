@@ -180,6 +180,16 @@
 
         .share-link { position: absolute; top: 10px; right: 10px; font-size: 1rem; opacity: 0.3; z-index: 10; }
 
+        footer {
+            margin-top: 50px;
+            margin-bottom: 20px;
+            font-size: 0.6rem; /* Analog zur Quelle auf der Rückseite */
+            color: #bbbbbb;
+            text-align: center;
+            max-width: 90vw;
+            line-height: 1.4;
+        }
+
         #toast {
             position: fixed; bottom: 20px; background: var(--text-main); color: white;
             padding: 10px 20px; font-weight: 800; text-transform: uppercase;
@@ -198,12 +208,12 @@
 
     <header>
         <h1>Guerilla Transformation Hacks</h1>
-        <div class="subtitle">Miami Change Division</div>
+        <div class="subtitle" id="toolbox-counter">Lade Hacks...</div>
     </header>
 
     <div class="controls">
-        <button class="main-btn" onclick="showRandom()">Zufalls-Hack</button>
-        <button class="main-btn" style="background:#fff; color:#000; border:2px solid #000; box-shadow: 3px 3px 0px var(--vice-blue);" onclick="showAll()">Alle Hacks</button>
+        <button class="main-btn" onclick="showRandom()">Surprise me</button>
+        <button class="main-btn" style="background:#fff; color:#000; border:2px solid #000; box-shadow: 3px 3px 0px var(--vice-blue);" onclick="showAll()">Show me all</button>
     </div>
 
     <div class="filter-wrapper">
@@ -214,13 +224,32 @@
     <div id="display-container"></div>
     <div id="toast">Link kopiert!</div>
 
+    <footer>
+        | Ein Produkt aus dem CAS Transformation Toolbox | 2026 | Vivienne Driske, Florian Gehrig, Martin Lüscher, Cornelia Marti |
+    </footer>
+
     <script src="data.js"></script>
     <script>
         const container = document.getElementById('display-container');
         const filterNav = document.getElementById('filter-nav');
         const toast = document.getElementById('toast');
         const toggleBtn = document.getElementById('toggle-filter-btn');
+        const counterEl = document.getElementById('toolbox-counter');
         let currentFilter = 'All';
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
+            });
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
 
         function toggleFilterNav() {
             const isVisible = filterNav.style.display === 'flex';
@@ -305,21 +334,16 @@
             filterCards('All', Array.from(document.querySelectorAll('.filter-tag')).find(b => b.innerText.includes('All')));
         }
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
         initFilters();
         
-        // Beim ersten Aufruf: Eine Zufallskarte anzeigen
+        // Initialisierung beim Laden
         window.onload = () => {
+            // Dynamischen Zähler setzen
+            counterEl.innerText = `${cardData.length} Hacks aus der Toolbox`;
+
             const params = new URLSearchParams(window.location.search);
             if (!params.get('id') && !params.get('tag')) {
-                showRandom(); // Nur wenn kein Deep-Link vorhanden ist
+                showRandom(); 
             }
         };
     </script>
