@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Guerilla Transformation Hacks</title>
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -26,7 +26,7 @@
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
             margin: 0;
-            padding: 60px 20px;
+            padding: 20px 15px; /* Reduziert für Mobile */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -35,123 +35,98 @@
 
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 20px; /* Kompakter */
             width: 100%;
         }
 
         h1 {
             font-family: 'Pacifico', cursive;
-            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-size: clamp(1.8rem, 6vw, 3.5rem); /* Kleiner auf Mobile */
             margin: 0;
             color: var(--text-main);
-            text-shadow: 3px 3px 0px var(--vice-pink), 6px 6px 0px var(--vice-blue);
+            text-shadow: 2px 2px 0px var(--vice-pink), 4px 4px 0px var(--vice-blue);
             transform: rotate(-1deg);
         }
 
         .subtitle {
             color: var(--text-muted);
-            margin-top: 15px;
-            font-size: 1rem;
+            margin-top: 5px;
+            font-size: 0.8rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 4px;
+            letter-spacing: 2px;
         }
 
         /* HAUPT-CONTROLS */
         .controls {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             display: flex;
-            gap: 15px;
+            gap: 10px;
             justify-content: center;
-            flex-wrap: wrap;
+            width: 100%;
         }
 
         button.main-btn {
             background: var(--text-main);
             color: white;
             border: none;
-            padding: 16px 32px;
+            padding: 12px 20px;
             border-radius: 4px;
             font-weight: 800;
             text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 4px 4px 0px var(--vice-pink);
-            transition: 0.2s;
+            box-shadow: 3px 3px 0px var(--vice-pink);
+            font-size: 0.8rem;
+            flex: 1;
+            max-width: 180px;
         }
 
-        button.main-btn:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px var(--vice-pink);
-        }
-
-        /* FILTER AUSKLAPP-MECHANISMUS */
+        /* FILTER */
         .filter-wrapper {
             width: 100%;
             max-width: 800px;
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 25px;
         }
 
         #toggle-filter-btn {
             background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
             cursor: pointer;
-            padding: 10px;
-            transition: color 0.2s;
-        }
-
-        #toggle-filter-btn:hover {
-            color: var(--vice-pink);
+            padding: 5px;
         }
 
         .filter-nav {
-            display: none; /* Initial versteckt */
+            display: none;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 8px;
-            border: 2px dashed #d1d5db;
+            gap: 8px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 4px;
+            border: 2px solid #ddd;
             margin-top: 10px;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .filter-tag {
             background: #ffffff;
-            border: 2px solid #ddd;
-            color: var(--text-main);
-            padding: 8px 16px;
+            border: 1px solid #ddd;
+            padding: 6px 12px;
             border-radius: 4px;
-            cursor: pointer;
             font-weight: 700;
             text-transform: uppercase;
-            font-size: 0.75rem;
-            transition: 0.2s;
+            font-size: 0.65rem;
         }
 
-        .filter-tag.active {
-            background: var(--text-main);
-            color: #fff;
-            border-color: var(--text-main);
-            box-shadow: 4px 4px 0px var(--vice-blue);
-        }
-
-        /* CARD GRID */
+        /* CARD DISPLAY */
         #display-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
             width: 100%;
             max-width: 1200px;
         }
@@ -160,8 +135,8 @@
 
         .card-container {
             width: 100%;
-            max-width: 340px;
-            height: 520px;
+            max-width: 320px;
+            height: 480px; /* Kompakter für Mobile */
             perspective: 1200px;
             cursor: pointer;
         }
@@ -170,124 +145,97 @@
             position: relative;
             width: 100%;
             height: 100%;
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
             transform-style: preserve-3d;
         }
 
+        /* FLICKER FIX: Verhindert Cyan-Aufblitzen */
         .card-container.is-flipped .card-inner { transform: rotateY(180deg); }
 
         .card-face {
             position: absolute;
             width: 100%;
             height: 100%;
-            backface-visibility: hidden;
+            backface-visibility: hidden; /* Wichtig für flüssigen Flip */
+            -webkit-backface-visibility: hidden;
             background: var(--card-bg);
             border: 3px solid #1a1a1a;
             border-radius: 4px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 8px 8px 0px rgba(0,0,0,0.1);
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.1);
         }
 
         .card-front img {
             width: 100%;
-            height: 220px;
+            height: 180px; /* Verkleinert für besseren Fit */
             object-fit: cover;
             border-bottom: 3px solid #1a1a1a;
         }
 
         .card-front .content {
-            padding: 20px;
+            padding: 15px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            gap: 12px;
         }
 
         .highlight-title {
             display: inline;
             background: var(--highlight-yellow);
             padding: 2px 6px;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 900;
             text-transform: uppercase;
             border: 2px solid #1a1a1a;
-            box-shadow: 3px 3px 0px var(--vice-pink);
+            box-shadow: 2px 2px 0px var(--vice-pink);
         }
 
         .teaser-text {
-            font-size: 0.9rem;
-            line-height: 1.4;
-            color: var(--text-main);
+            font-size: 0.85rem;
+            line-height: 1.3;
             margin-top: 10px;
         }
 
         .card-back {
             transform: rotateY(180deg);
-            padding: 25px;
+            padding: 20px;
             background: #fff;
-            border-top: 10px solid var(--vice-blue);
+            border-top: 8px solid var(--vice-blue);
         }
 
-        .card-back h3 {
-            font-weight: 900;
-            text-transform: uppercase;
-            font-size: 1.2rem;
-            margin: 0 0 15px 0;
-            color: var(--vice-pink);
-        }
-
-        .section-label {
-            font-size: 0.7rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            color: #999;
-            margin-bottom: 4px;
-            display: block;
-        }
-
-        .tag-pill {
-            font-size: 0.65rem;
-            background: var(--vice-blue);
-            color: #000;
-            padding: 3px 8px;
-            border-radius: 2px;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-
+        /* TEILEN ICON FIX */
         .share-link {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.2rem;
-            opacity: 0.4;
-        }
-
-        .source-box {
-            margin-top: auto;
-            font-size: 0.7rem;
-            color: #999;
-            border-top: 2px solid #eee;
-            padding-top: 10px;
+            top: 10px;
+            right: 10px;
+            font-size: 1rem;
+            opacity: 0.3;
+            z-index: 10;
         }
 
         #toast {
             position: fixed;
-            bottom: 30px;
+            bottom: 20px;
             background: var(--text-main);
             color: white;
-            padding: 12px 24px;
+            padding: 10px 20px;
             font-weight: 800;
             text-transform: uppercase;
-            border-radius: 0;
-            box-shadow: 4px 4px 0px var(--vice-blue);
-            transform: translateY(150px);
+            box-shadow: 3px 3px 0px var(--vice-blue);
+            transform: translateY(100px);
             transition: 0.3s;
-            z-index: 1000;
+            z-index: 10000;
         }
         #toast.show { transform: translateY(0); }
+
+        @media (max-width: 600px) {
+            body { padding: 10px 10px; }
+            h1 { margin-top: 5px; }
+            .card-container { height: 440px; }
+            .subtitle { letter-spacing: 1px; }
+        }
     </style>
 </head>
 <body>
@@ -299,11 +247,11 @@
 
     <div class="controls">
         <button class="main-btn" onclick="showRandom()">Zufalls-Hack</button>
-        <button class="main-btn" style="background:#fff; color:#000; border:2px solid #000; box-shadow: 4px 4px 0px var(--vice-blue);" onclick="showAll()">Alle anzeigen (Shuffle)</button>
+        <button class="main-btn" style="background:#fff; color:#000; border:2px solid #000; box-shadow: 3px 3px 0px var(--vice-blue);" onclick="showAll()">Alle Hacks</button>
     </div>
 
     <div class="filter-wrapper">
-        <button id="toggle-filter-btn" onclick="toggleFilterNav()">+ Nach Themen filtern</button>
+        <button id="toggle-filter-btn" onclick="toggleFilterNav()">+ Themen filtern</button>
         <div class="filter-nav" id="filter-nav"></div>
     </div>
 
@@ -329,7 +277,7 @@
         function toggleFilterNav() {
             const isVisible = filterNav.style.display === 'flex';
             filterNav.style.display = isVisible ? 'none' : 'flex';
-            toggleBtn.innerText = isVisible ? '+ Nach Themen filtern' : '- Filter schließen';
+            toggleBtn.innerText = isVisible ? '+ Themen filtern' : '- Filter schließen';
         }
 
         function copyLink(e, url) {
@@ -348,14 +296,14 @@
             allTags.forEach(tag => {
                 const btn = document.createElement('button');
                 btn.className = `filter-tag ${tag === 'All' ? 'active' : ''}`;
-                btn.innerHTML = `${tag} <span onclick="copyLink(event, '?tag=${tag}')" style="cursor:help;margin-left:5px">🔗</span>`;
-                btn.onclick = (e) => { if(e.target.tagName !== 'SPAN') filterCards(tag, btn); };
+                btn.innerHTML = `${tag}`;
+                btn.onclick = () => filterCards(tag, btn);
                 filterNav.appendChild(btn);
             });
         }
 
         function createCardHTML(data) {
-            const tagsHTML = data.tags.map(t => `<span class="tag-pill">${t}</span>`).join('');
+            const tagsHTML = data.tags.map(t => `<span class="tag-pill" style="font-size:0.6rem; background:var(--vice-blue); color:#000; padding:2px 5px; margin-right:3px; font-weight:800; text-transform:uppercase;">${t}</span>`).join('');
             return `
                 <div class="card-container" id="card-${data.id}" onclick="this.classList.toggle('is-flipped')">
                     <div class="card-inner">
@@ -364,17 +312,17 @@
                             <div class="content">
                                 <div><span class="highlight-title">${data.title}</span></div>
                                 <p class="teaser-text">${data.teaser}</p>
-                                <div style="display:flex; gap:5px; flex-wrap:wrap; margin-top:auto;">${tagsHTML}</div>
+                                <div style="display:flex; gap:3px; flex-wrap:wrap; margin-top:auto;">${tagsHTML}</div>
                             </div>
                         </div>
                         <div class="card-face card-back">
                             <div class="share-link" onclick="copyLink(event, '?id=${data.id}')">🔗</div>
-                            <h3>${data.title}</h3>
-                            <span class="section-label">Beschreibung</span>
-                            <p>${data.text}</p>
-                            <span class="section-label">Hintergrund</span>
-                            <p>${data.hintergrund || '---'}</p>
-                            <div class="source-box">${data.source || 'Guerilla Archives'}</div>
+                            <h3 style="font-weight:900; text-transform:uppercase; color:var(--vice-pink); margin:0 0 10px 0; font-size:1.1rem;">${data.title}</h3>
+                            <span style="font-size:0.6rem; font-weight:900; text-transform:uppercase; color:#999; display:block;">Beschreibung</span>
+                            <p style="font-size:0.8rem; line-height:1.4; margin:3px 0 10px 0;">${data.text}</p>
+                            <span style="font-size:0.6rem; font-weight:900; text-transform:uppercase; color:#999; display:block;">Hintergrund</span>
+                            <p style="font-size:0.8rem; line-height:1.4; margin:3px 0 10px 0;">${data.hintergrund || '---'}</p>
+                            <div style="margin-top:auto; font-size:0.6rem; color:#999; border-top:1px solid #eee; padding-top:5px;">${data.source || 'Guerilla Archives'}</div>
                         </div>
                     </div>
                 </div>`;
@@ -398,8 +346,7 @@
         }
 
         function showAll() {
-            const allBtn = Array.from(document.querySelectorAll('.filter-tag')).find(b => b.innerText.includes('All'));
-            filterCards('All', allBtn);
+            filterCards('All', null);
         }
 
         initFilters();
