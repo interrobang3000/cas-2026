@@ -244,12 +244,8 @@
             allTags.forEach(tag => {
                 const btn = document.createElement('button');
                 btn.className = `filter-tag ${tag === 'All' ? 'active' : ''}`;
-                
-                // Button Text + Share Icon
                 btn.innerHTML = `<span>${tag}</span><span class="tag-share-icon" title="Kategorie teilen">🔗</span>`;
-                
                 btn.onclick = (e) => {
-                    // Wenn das Icon geklickt wird -> Kopieren, sonst Filter
                     if (e.target.classList.contains('tag-share-icon')) {
                         copyLink(e, `?tag=${tag}`);
                     } else {
@@ -280,7 +276,9 @@
                             <p style="font-size:0.75rem; line-height:1.4; margin:2px 0 8px 0;">${data.text}</p>
                             <span style="font-size:0.55rem; font-weight:900; text-transform:uppercase; color:#999; display:block;">Hintergrund</span>
                             <p style="font-size:0.75rem; line-height:1.4; margin:2px 0 8px 0;">${data.hintergrund || '---'}</p>
-                            <div style="margin-top:auto; font-size:0.55rem; color:#bbbbbb; border-top:1px solid #eee; padding-top:4px;">${data.source || 'Guerilla Archives'}</div>
+                            <div style="margin-top:auto; font-size:0.55rem; color:#bbbbbb; border-top:1px solid #eee; padding-top:4px;">
+                                <span style="font-weight:900; text-transform:uppercase;">Inspiration:</span> ${data.source || 'Guerilla Archives'}
+                            </div>
                         </div>
                     </div>
                 </div>`;
@@ -316,7 +314,14 @@
         }
 
         initFilters();
-        showAll(); // Startet mit allen Hacks
+        
+        // Beim ersten Aufruf: Eine Zufallskarte anzeigen
+        window.onload = () => {
+            const params = new URLSearchParams(window.location.search);
+            if (!params.get('id') && !params.get('tag')) {
+                showRandom(); // Nur wenn kein Deep-Link vorhanden ist
+            }
+        };
     </script>
 </body>
 </html>
