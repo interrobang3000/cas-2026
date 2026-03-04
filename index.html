@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Guerilla-Transformation – Hacks aus der Toolbox</title>
     <link rel="icon" type="image/png" href="img/favicon.png">
     <link rel="apple-touch-icon" href="img/favicon.png">
@@ -228,118 +228,143 @@
         | Ein Produkt aus dem CAS Transformation Toolbox | 2026 | Vivienne Driske, Florian Gehrig, Martin Lüscher, Cornelia Marti |
     </footer>
 
-    <script src="data.js"></script>
     <script>
-        const container = document.getElementById('display-container');
-        const filterNav = document.getElementById('filter-nav');
-        const toast = document.getElementById('toast');
-        const toggleBtn = document.getElementById('toggle-filter-btn');
-        const counterEl = document.getElementById('toolbox-counter');
-        let currentFilter = 'All';
+        // 1. CACHE-BUSTER: Lädt data.js immer in der neuesten Version
+        const script = document.createElement('script');
+        script.src = 'data.js?v=' + Date.now();
+        document.head.appendChild(script);
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
+        script.onload = () => {
+            const container = document.getElementById('display-container');
+            const filterNav = document.getElementById('filter-nav');
+            const toast = document.getElementById('toast');
+            const toggleBtn = document.getElementById('toggle-filter-btn');
+            const counterEl = document.getElementById('toolbox-counter');
+            let currentFilter = 'All';
 
-        function toggleFilterNav() {
-            const isVisible = filterNav.style.display === 'flex';
-            filterNav.style.display = isVisible ? 'none' : 'flex';
-            toggleBtn.innerText = isVisible ? '+ Themen filtern' : '- Filter schließen';
-        }
-
-        function copyLink(e, url) {
-            if(e) e.stopPropagation();
-            const fullUrl = window.location.origin + window.location.pathname + url;
-            navigator.clipboard.writeText(fullUrl).then(() => {
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 2000);
-            });
-        }
-
-        function initFilters() {
-            const allTags = new Set(['All']);
-            cardData.forEach(card => card.tags.forEach(tag => allTags.add(tag)));
-            filterNav.innerHTML = '';
-            allTags.forEach(tag => {
-                const btn = document.createElement('button');
-                btn.className = `filter-tag ${tag === 'All' ? 'active' : ''}`;
-                btn.innerHTML = `<span>${tag}</span><span class="tag-share-icon" title="Kategorie teilen">🔗</span>`;
-                btn.onclick = (e) => {
-                    if (e.target.classList.contains('tag-share-icon')) {
-                        copyLink(e, `?tag=${tag}`);
-                    } else {
-                        filterCards(tag, btn);
+            // 2. SERVICE-WORKER CLEANUP
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    for (let registration of registrations) {
+                        registration.unregister();
                     }
-                };
-                filterNav.appendChild(btn);
-            });
-        }
+                });
+            }
 
-        function createCardHTML(data) {
-            const tagsHTML = data.tags.map(t => `<span class="tag-pill" style="font-size:0.55rem; background:var(--vice-blue); color:#000; padding:2px 4px; margin-right:3px; font-weight:800; border:1px solid #000;">${t}</span>`).join('');
-            return `
-                <div class="card-container" id="card-${data.id}" onclick="this.classList.toggle('is-flipped')">
-                    <div class="card-inner">
-                        <div class="card-face card-front">
-                            <img src="${data.image}" alt="">
-                            <div class="content">
-                                <div><span class="highlight-title">${data.title}</span></div>
-                                <p class="teaser-text">${data.teaser}</p>
-                                <div style="display:flex; gap:3px; flex-wrap:wrap; margin-top:auto;">${tagsHTML}</div>
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            function toggleFilterNav() {
+                const isVisible = filterNav.style.display === 'flex';
+                filterNav.style.display = isVisible ? 'none' : 'flex';
+                toggleBtn.innerText = isVisible ? '+ Themen filtern' : '- Filter schließen';
+            }
+
+            function copyLink(e, url) {
+                if(e) e.stopPropagation();
+                const fullUrl = window.location.origin + window.location.pathname + url;
+                navigator.clipboard.writeText(fullUrl).then(() => {
+                    toast.classList.add('show');
+                    setTimeout(() => toast.classList.remove('show'), 2000);
+                });
+            }
+
+            function initFilters() {
+                const allTags = new Set(['All']);
+                cardData.forEach(card => card.tags.forEach(tag => allTags.add(tag)));
+                filterNav.innerHTML = '';
+                allTags.forEach(tag => {
+                    const btn = document.createElement('button');
+                    btn.className = `filter-tag ${tag === 'All' ? 'active' : ''}`;
+                    btn.innerHTML = `<span>${tag}</span><span class="tag-share-icon" title="Kategorie teilen">🔗</span>`;
+                    btn.onclick = (e) => {
+                        if (e.target.classList.contains('tag-share-icon')) {
+                            copyLink(e, `?tag=${tag}`);
+                        } else {
+                            filterCards(tag, btn);
+                        }
+                    };
+                    filterNav.appendChild(btn);
+                });
+            }
+
+            function createCardHTML(data) {
+                const tagsHTML = data.tags.map(t => `<span class="tag-pill" style="font-size:0.55rem; background:var(--vice-blue); color:#000; padding:2px 4px; margin-right:3px; font-weight:800; border:1px solid #000;">${t}</span>`).join('');
+                return `
+                    <div class="card-container" id="card-${data.id}" onclick="this.classList.toggle('is-flipped')">
+                        <div class="card-inner">
+                            <div class="card-face card-front">
+                                <img src="${data.image}" alt="">
+                                <div class="content">
+                                    <div><span class="highlight-title">${data.title}</span></div>
+                                    <p class="teaser-text">${data.teaser}</p>
+                                    <div style="display:flex; gap:3px; flex-wrap:wrap; margin-top:auto;">${tagsHTML}</div>
+                                </div>
+                            </div>
+                            <div class="card-face card-back">
+                                <div class="share-link" onclick="copyLink(event, '?id=${data.id}')">🔗</div>
+                                <h3 style="font-weight:900; text-transform:uppercase; color:var(--vice-pink); margin:0 0 10px 0; font-size:1.0rem;">${data.title}</h3>
+                                
+                                <span style="font-size:0.65rem; font-weight:900; text-transform:uppercase; color:#999; display:block;">Beschreibung</span>
+                                <p style="font-size:0.9rem; line-height:1.4; margin:2px 0 12px 0;">${data.text}</p>
+                                
+                                <span style="font-size:0.65rem; font-weight:900; text-transform:uppercase; color:#999; display:block;">Hintergrund</span>
+                                <p style="font-size:0.9rem; line-height:1.4; margin:2px 0 12px 0;">${data.hintergrund || '---'}</p>
+                                
+                                <div style="margin-top:auto; font-size:0.55rem; color:#bbbbbb; border-top:1px solid #eee; padding-top:4px;">
+                                    <span style="font-weight:900; text-transform:uppercase;">Inspiration:</span> ${data.source || 'Guerilla Archives'}
+                                </div>
                             </div>
                         </div>
-                        <div class="card-face card-back">
-                            <div class="share-link" onclick="copyLink(event, '?id=${data.id}')">🔗</div>
-                            <h3 style="font-weight:900; text-transform:uppercase; color:var(--vice-pink); margin:0 0 10px 0; font-size:1.0rem;">${data.title}</h3>
-                            
-                            <span style="font-size:0.65rem; font-weight:900; text-transform:uppercase; color:#999; display:block;">Beschreibung</span>
-                            <p style="font-size:0.9rem; line-height:1.4; margin:2px 0 12px 0;">${data.text}</p>
-                            
-                            <span style="font-size:0.65rem; font-weight:900; text-transform:uppercase; color:#999; display:block;">Hintergrund</span>
-                            <p style="font-size:0.9rem; line-height:1.4; margin:2px 0 12px 0;">${data.hintergrund || '---'}</p>
-                            
-                            <div style="margin-top:auto; font-size:0.55rem; color:#bbbbbb; border-top:1px solid #eee; padding-top:4px;">
-                                <span style="font-weight:900; text-transform:uppercase;">Inspiration:</span> ${data.source || 'Guerilla Archives'}
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-        }
+                    </div>`;
+            }
 
-        function filterCards(tag, btn) {
-            currentFilter = tag;
-            document.querySelectorAll('.filter-tag').forEach(b => b.classList.remove('active'));
-            if(btn) btn.classList.add('active');
-            container.classList.remove('single-mode');
-            let filtered = tag === 'All' ? [...cardData] : cardData.filter(c => c.tags.includes(tag));
-            shuffleArray(filtered);
-            container.innerHTML = filtered.map(c => createCardHTML(c)).join('');
-        }
+            function filterCards(tag, btn) {
+                currentFilter = tag;
+                document.querySelectorAll('.filter-tag').forEach(b => b.classList.remove('active'));
+                if(btn) btn.classList.add('active');
+                container.classList.remove('single-mode');
+                let filtered = tag === 'All' ? [...cardData] : cardData.filter(c => c.tags.includes(tag));
+                shuffleArray(filtered);
+                container.innerHTML = filtered.map(c => createCardHTML(c)).join('');
+            }
 
-        function showRandom() {
-            const filtered = currentFilter === 'All' ? cardData : cardData.filter(c => c.tags.includes(currentFilter));
-            const card = filtered[Math.floor(Math.random() * filtered.length)];
-            container.classList.add('single-mode');
-            container.innerHTML = createCardHTML(card);
-        }
+            function showRandom() {
+                const filtered = currentFilter === 'All' ? cardData : cardData.filter(c => c.tags.includes(currentFilter));
+                const card = filtered[Math.floor(Math.random() * filtered.length)];
+                container.classList.add('single-mode');
+                container.innerHTML = createCardHTML(card);
+            }
 
-        function showAll() {
-            filterCards('All', Array.from(document.querySelectorAll('.filter-tag')).find(b => b.innerText.includes('All')));
-        }
+            function showAll() {
+                filterCards('All', Array.from(document.querySelectorAll('.filter-tag')).find(b => b.innerText.includes('All')));
+            }
 
-        initFilters();
-        
-        window.onload = () => {
+            initFilters();
             counterEl.innerText = `${cardData.length} Hacks aus der Toolbox`;
 
             const params = new URLSearchParams(window.location.search);
-            if (!params.get('id') && !params.get('tag')) {
-                showRandom(); 
+            if (params.get('id')) {
+                const card = cardData.find(c => c.id == params.get('id'));
+                if(card) {
+                    container.classList.add('single-mode');
+                    container.innerHTML = createCardHTML(card);
+                }
+            } else if (params.get('tag')) {
+                filterCards(params.get('tag'), null);
+            } else {
+                showRandom();
             }
+
+            window.showRandom = showRandom;
+            window.showAll = showAll;
+            window.toggleFilterNav = toggleFilterNav;
+            window.copyLink = copyLink;
         };
     </script>
 </body>
