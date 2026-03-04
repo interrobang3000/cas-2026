@@ -2,10 +2,8 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Guerilla Transformation Hacks</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#ff71ce">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guerilla-Transformation – Hacks aus der Toolbox</title>
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -183,7 +181,7 @@
         footer {
             margin-top: 50px;
             margin-bottom: 20px;
-            font-size: 0.6rem; /* Analog zur Quelle auf der Rückseite */
+            font-size: 0.6rem;
             color: #bbbbbb;
             text-align: center;
             max-width: 90vw;
@@ -207,7 +205,7 @@
 <body>
 
     <header>
-        <h1>Guerilla Transformation Hacks</h1>
+        <h1>Guerilla-Transformation</h1>
         <div class="subtitle" id="toolbox-counter">Lade Hacks...</div>
     </header>
 
@@ -236,12 +234,6 @@
         const toggleBtn = document.getElementById('toggle-filter-btn');
         const counterEl = document.getElementById('toolbox-counter');
         let currentFilter = 'All';
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
-            });
-        }
 
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
@@ -336,9 +328,7 @@
 
         initFilters();
         
-        // Initialisierung beim Laden
         window.onload = () => {
-            // Dynamischen Zähler setzen
             counterEl.innerText = `${cardData.length} Hacks aus der Toolbox`;
 
             const params = new URLSearchParams(window.location.search);
