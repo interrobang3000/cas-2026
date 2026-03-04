@@ -295,10 +295,13 @@
                         <div class="card-face card-back">
                             <div class="share-link" onclick="copyLink(event, '?id=${data.id}')">🔗</div>
                             <h3 style="font-weight:900; text-transform:uppercase; color:var(--vice-pink); margin:0 0 10px 0; font-size:1.0rem;">${data.title}</h3>
-                            <span style="font-size:0.55rem; font-weight:900; text-transform:uppercase; color:#999; display:block;">Beschreibung</span>
-                            <p style="font-size:0.75rem; line-height:1.4; margin:2px 0 8px 0;">${data.text}</p>
-                            <span style="font-size:0.55rem; font-weight:900; text-transform:uppercase; color:#999; display:block;">Hintergrund</span>
-                            <p style="font-size:0.75rem; line-height:1.4; margin:2px 0 8px 0;">${data.hintergrund || '---'}</p>
+                            
+                            <span style="font-size:0.65rem; font-weight:900; text-transform:uppercase; color:#999; display:block;">Beschreibung</span>
+                            <p style="font-size:0.9rem; line-height:1.4; margin:2px 0 12px 0;">${data.text}</p>
+                            
+                            <span style="font-size:0.65rem; font-weight:900; text-transform:uppercase; color:#999; display:block;">Hintergrund</span>
+                            <p style="font-size:0.9rem; line-height:1.4; margin:2px 0 12px 0;">${data.hintergrund || '---'}</p>
+                            
                             <div style="margin-top:auto; font-size:0.55rem; color:#bbbbbb; border-top:1px solid #eee; padding-top:4px;">
                                 <span style="font-weight:900; text-transform:uppercase;">Inspiration:</span> ${data.source || 'Guerilla Archives'}
                             </div>
